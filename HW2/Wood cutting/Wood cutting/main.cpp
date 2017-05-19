@@ -7,14 +7,15 @@
 //
 
 #include <iostream>
-#include <array>
+//#include <array>
 
 #define max 214748364
+#define Max(a,b) (a>b)? a:b
 
 
 int** cost_table;
 int** cut_table;
-int n=5;
+int n=4;
 
 void display(int** array)
 {
@@ -34,6 +35,15 @@ void setZero(int** array)
         for(int j=0;j<=n;j++)
             array[i][j]=0;
     }
+}
+void setNull(int** array)
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<=n;j++)
+            array[i][j]=NULL;
+    }
+
 }
 int cost(int i,int j,int* cut)
 {
@@ -61,8 +71,6 @@ void botton_up(int* cut)
     }
     
     //start
-    
-    
     for(int j=2;j<=n;j++)
     {
         for(int i=j-2;i>=0;i--)
@@ -79,18 +87,47 @@ void botton_up(int* cut)
             }
         }
     }
-    
-        
     display(cost_table);
     display(cut_table);
-    
+    free(cost_table);
+    free(cut_table);
+}
+
+int top_down(int* cut,int i,int j)
+{
+    if(i>=j-1)
+        return 0;
+    else
+    {
+        for(int r=i+1;i<j;r++)
+        {
+            int temp=top_down(cut,i,r)+top_down(cut,r,j)+cost(i,j,cut);
+            if(temp<cost_table[i][j])
+                cost_table[i][j]=temp;
+        }
+        return cost_table[i][j];
+    }
 
 }
 
 int main(int argc, const char * argv[])
 {
-    int cut[6]={0,12,25,66,100,120};
+    int cut[5]={0,2,4,7,10};
     botton_up(cut);
     
 
+    cost_table=new int* [n];
+    cut_table=new int* [n];
+    for(int i=0;i<n;i++)
+    {
+        cost_table[i]=new int [n+1];
+        cut_table[i]=new int [n+1];
+    }
+    setNull(cost_table);
+
+
+    //top_down(cut,0,5);
+    display(cost_table);
+    
+    while(1);
 }
