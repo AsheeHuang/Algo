@@ -1,10 +1,4 @@
-//
-//  main.cpp
-//  Wood cutting
-//
-//  Created by Ashee on 2017/5/14.
-//  Copyright © 2017年 Ashee. All rights reserved.
-//
+
 
 #include <iostream>
 #include <stdio.h>
@@ -15,7 +9,8 @@
 
 int** cost_table;
 int** cut_table;
-int n=4;
+int n,L;
+int a[5];
 
 void display(int** array)
 {
@@ -42,7 +37,7 @@ int cost(int i,int j,int* cut)
     return cut[j]-cut[i];
 }
 
-void botton_up(int* cut)
+int botton_up(int* cut)
 {
     //initialized
     int temp=0;
@@ -79,46 +74,28 @@ void botton_up(int* cut)
             }
         }
     }
+    
     display(cost_table);
-    display(cut_table);
-
+   // display(cut_table);
+    
+    return cost_table[0][4];
 }
 
-int top_down(int* cut,int i,int j)
-{
-    if(i>=j-1)
-        return 0;
-    else
-    {
-        for(int r=i+1;i<j;r++)
-        {
-            int temp=top_down(cut,i,r)+top_down(cut,r,j)+cost(i,j,cut);
-            if(temp<cost_table[i][j])
-                cost_table[i][j]=temp;
-        }
-        return cost_table[i][j];
-    }
 
-}
 
 int main(int argc, const char * argv[])
 {
-    int cut[5]={0,2,4,7,10};
-    botton_up(cut);
+	L=10;
+	n=3;	
+   	a[0]=0;
+   	a[1]=2;
+   	a[2]=4;
+   	a[3]=7;
+   	a[4]=L;
+   	n++;
     
-
-    cost_table=new int* [n];
-    cut_table=new int* [n];
-    for(int i=0;i<n;i++)
-    {
-        cost_table[i]=new int [n+1];
-        cut_table[i]=new int [n+1];
-    }
-
-
-
-    //top_down(cut,0,5);
-   
+    FILE* fd = fopen("output.txt", "w");
+    fprintf(fd,"%d",botton_up(a));
     
-    while(1);
+    return 0;
 }
