@@ -92,5 +92,5 @@ int main(int argc, const char * argv[])
     int cut[6]={0,12,25,66,100,120};
     botton_up(cut);
     
-
+	while (1);
 }
