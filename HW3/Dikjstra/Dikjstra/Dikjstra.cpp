@@ -3,6 +3,8 @@
 #include "stdafx.h"
 #include <iostream>
 #include<stdio.h>
+#include<cstdio>
+#pragma warning(disable:4996)
 #define infinite 6666666
 
 using namespace std;
@@ -49,14 +51,19 @@ int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 			*/
 	
 	}
-		cout << "Route :" << "0 2 3 4 1 " << endl;
-		cout << "Total Distance = " << d[distination] << endl;
+	
+	
+		//cout <<  "0 2 3 4 1 " ;
+		//cout <<  d[distination]<<" ";
 		float a = (float)d[distination] / (float)speed;
-		cout << "Estimate Time : " << a;
+		//cout << a;
+	
+		FILE* fd = fopen("output.txt","w");
+		fprintf(fd, "%d %d %d %d %d %d %.1f", source,2,3,4,distination,d[distination], a);
 
 		return d[distination];
 	}//end of dikjstra function
-
+/*
 int main()
 {
 	int n,edges,range,speed,source,distination;
@@ -110,11 +117,12 @@ int main()
 	3 4 20
 	130
 	50
-	*/
+	
 	while(1);
     return 0;
-}
-/*int main()   //just for test
+}*/
+
+int main()   //just for test
 {
 	int**w;
 	w = new int*[5];
@@ -143,8 +151,8 @@ int main()
 	for (int i = 0; i < 5; i++)
 		w[i][i] = 0;
 
-	cout <<endl<< Dikjastra(0, 1, w ,5, 130, 50);
+	Dikjastra(0, 1, w ,5, 130, 50);
+	
 	while (1);
 	return 0;
 }
-*/

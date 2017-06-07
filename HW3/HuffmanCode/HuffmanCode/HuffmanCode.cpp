@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <iostream>
 #include <fstream>
+#include <string>
 using namespace std;
 struct Record
 {
@@ -11,7 +12,13 @@ struct Record
 	int count=0;
 	Record* left=NULL, *right=NULL;
 };
-
+struct Huffmancode
+{
+	string s="";
+	char c;
+};
+Huffmancode huffmancode[100];
+int counter = 0;
 void Heapify(Record* MinHeap, int i, int length)
 {
 	int key = MinHeap[i].count;
@@ -135,6 +142,7 @@ void printCode(Record* root, int code[], int top)
 		cout << root->c << ": ";
 		for (int i = 0; i < top; i++)
 			cout << code[i];
+
 		cout << endl;
 	}
 }
@@ -143,7 +151,7 @@ int main()
 	char ch;
 	int top = 0;
 	Record record[100];
-	
+
 	fstream file;
 	file.open("Text.txt",ios::in);
 	if (!file)
@@ -166,11 +174,14 @@ int main()
 	printRecord(record, top);
 
 	Record* root=Huffman(record, top);
- 	int code[50];
+ 	int code[30];
 	printCode(root, code, 0);
+	Inorder(root);
 	//cout << root->count << endl;
-
-
+	/*
+	for (int i = 0; i < counter; i++)
+		cout << huffmancode[i].c  <<"  : "<<huffmancode[i].s<< endl;
+	*/
 
 	system("PAUSE");
     return 0;
