@@ -1,2 +1,4 @@
-﻿  Dikjstra.vcxproj -> D:\Github\Algo\HW3\Dikjstra\Debug\Dikjstra.exe
+﻿  Dikjstra.cpp
+  LINK : 最後的累加連結找不到或未建置 D:\Github\Algo\HW3\Dikjstra\Debug\Dikjstra.exe，正在執行完整連結
+  Dikjstra.vcxproj -> D:\Github\Algo\HW3\Dikjstra\Debug\Dikjstra.exe
   Dikjstra.vcxproj -> D:\Github\Algo\HW3\Dikjstra\Debug\Dikjstra.pdb (Partial PDB)

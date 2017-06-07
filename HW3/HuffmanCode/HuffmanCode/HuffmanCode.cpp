@@ -43,7 +43,7 @@ Record* ExtractMin(Record* MinHeap, int length)
 {
     Record temp;
 	Record* pointer=new Record();
-	if (length >= 1)
+	if (length > 0)
 	{
 		temp = MinHeap[1];
 		MinHeap[1] = MinHeap[length];
@@ -92,7 +92,7 @@ Record* Huffman(Record* MinHeap, int top)
   		if(length>=0)
 			InsertHeap(MinHeap, *z, length++);
 	}
-	Record* root = &MinHeap[0];
+	Record* root = &MinHeap[1];
 	return root; //return root
 }
 int search(char ch,Record* record,int top)

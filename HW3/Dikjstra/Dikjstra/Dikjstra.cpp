@@ -13,6 +13,9 @@ int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 {
 	int * choosed = new int[n];
 	int* d = new int[n];
+	int comefrom[5];
+	comefrom[0]=0;
+	
 
 	for (int i = 0; i < n; i++)
 		d[i] = infinite;
@@ -38,9 +41,11 @@ int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 		choosed[u] = 1; //true
 		for (int v = 0; v < n; v++)
 		{
-
 			if (d[v] > d[u] + w[u][v] && w[u][v] < range)
+			{
 				d[v] = d[u] + w[u][v];
+					comefrom[v]=u;
+			}
 		}
 		/*
 		for (int k = 0; k < n; k ++)
@@ -59,7 +64,22 @@ int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 		//cout << a;
 	
 		FILE* fd = fopen("output.txt","w");
-		fprintf(fd, "%d %d %d %d %d %d %.1f", source,2,3,4,distination,d[distination], a);
+		//fprintf(fd, "%d %d %d %d %d %d %.1f", source,comefrom[comefrom[comefrom[distination]]],comefrom[comefrom[distination]],comefrom[distination],distination,d[distination], a);
+		//fprintf(fd,"%d",source);
+		//cout<<comefrom[4]<<endl;
+		int route[5],i;
+		route[0]=distination;
+		int k=distination;
+		for(i=1;comefrom[k]!=source;i++)
+		{
+			route[i]=comefrom[k];
+			k=comefrom[k];
+		}
+		fprintf(fd,"%d ",source);
+		for(int j=i-1;j>=0;j--)
+			fprintf(fd,"%d ",route[j]);
+		fprintf(fd,"%d ",d[distination]);
+		fprintf(fd,"%.1f ",(float)d[distination]/(float)speed);
 
 		return d[distination];
 	}//end of dikjstra function
@@ -104,7 +124,7 @@ int main()
 	cout << "Distination City";
 	cin >> distination;
 
-	cout << Dikjastra(source, distination, distance, n, range, speed);
+	Dikjastra(source, distination, distance, n, range, speed);
 	/*
 	5
 	7
@@ -118,9 +138,10 @@ int main()
 	130
 	50
 	
-	while(1);
+	
     return 0;
-}*/
+}
+*/
 
 int main()   //just for test
 {
@@ -153,6 +174,6 @@ int main()   //just for test
 
 	Dikjastra(0, 1, w ,5, 130, 50);
 	
-	while (1);
+	system("PAUSE");
 	return 0;
 }
