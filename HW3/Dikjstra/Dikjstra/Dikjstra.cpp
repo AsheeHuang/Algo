@@ -1,6 +1,6 @@
 // Dikjstra.cpp : 定義主控台應用程式的進入點。
 //
-#include "stdafx.h"
+//#include "stdafx.h"
 #include <iostream>
 #include<stdio.h>
 #include<cstdio>
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
+void Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 {
 	int * choosed = new int[n];
 	int* d = new int[n];
@@ -47,6 +47,7 @@ int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 					comefrom[v]=u;
 			}
 		}
+
 		/*
 		for (int k = 0; k < n; k ++)
 			cout << d[k] << " ";
@@ -80,8 +81,11 @@ int Dikjastra(int source, int distination, int** w, int n, int range, int speed)
 			fprintf(fd,"%d ",route[j]);
 		fprintf(fd,"%d ",d[distination]);
 		fprintf(fd,"%.1f ",(float)d[distination]/(float)speed);
+				
+		delete [] choosed;
+		delete [] d;
 
-		return d[distination];
+	
 	}//end of dikjstra function
 /*
 int main()
@@ -171,9 +175,19 @@ int main()   //just for test
 	w[3][4] = 20;
 	for (int i = 0; i < 5; i++)
 		w[i][i] = 0;
+	int source=0;
+	int distination=1;
+	int n=5;
+	int limit=130;
+	int speed=50;
 
-	Dikjastra(0, 1, w ,5, 130, 50);
+	Dikjastra(source, distination, w ,n, limit, speed);
+	
+	for(int i=0;i<n;i++)
+		delete [] w[i];
+	delete [] w;
 	
 	system("PAUSE");
 	return 0;
 }
+
