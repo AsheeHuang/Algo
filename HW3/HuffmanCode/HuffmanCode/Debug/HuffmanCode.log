@@ -1,3 +1,2 @@
 ﻿  HuffmanCode.cpp
-  HuffmanCode.vcxproj -> D:\Github\Algo\HW3\HuffmanCode\Debug\HuffmanCode.exe
-  HuffmanCode.vcxproj -> D:\Github\Algo\HW3\HuffmanCode\Debug\HuffmanCode.pdb (Partial PDB)
+LINK : fatal error LNK1168: 無法開啟 D:\Github\Algo\HW3\HuffmanCode\Debug\HuffmanCode.exe 進行寫入

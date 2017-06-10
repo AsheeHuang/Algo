@@ -14,11 +14,32 @@ struct Record
 };
 struct Huffmancode
 {
-	string s="";
+	string s;
 	char c;
 };
 Huffmancode huffmancode[100];
-int counter = 0;
+
+int search(char ch, Record* record, int top)
+{
+	for (int i = 0; i <= top; i++)
+	{
+		if (record[i].c == ch)
+			return i;
+	}
+	return -1; //not found
+}
+void pushRecord(char ch, Record* record, int top)
+{
+	record[top].c = ch;
+	record[top].count++;
+}
+void printRecord(Record* record, int top)
+{
+	for (int i = 1; i <= top; i++)
+		cout << "char = " << record[i].c << "   count = " << record[i].count << endl;
+
+}
+
 void Heapify(Record* MinHeap, int i, int length)
 {
 	int key = MinHeap[i].count;
@@ -48,6 +69,7 @@ Record* ExtractMin(Record* MinHeap, int length)
 		temp = MinHeap[1];
 		MinHeap[1] = MinHeap[length];
 		MinHeap[length] = temp;
+		
 		Heapify(MinHeap, 1, length - 1);
 	}
 	else
@@ -56,9 +78,10 @@ Record* ExtractMin(Record* MinHeap, int length)
 }
 void InsertHeap(Record* MinHeap, Record record, int length)
 {
+
 	if(length>0)
 		MinHeap[++length] = record;
-	//bottom up heapify
+		//bottom up heapify
 	int i = length;
 	int parent;
 	int key = MinHeap[length].count;
@@ -77,10 +100,11 @@ void InsertHeap(Record* MinHeap, Record record, int length)
 }
 Record* Huffman(Record* MinHeap, int top)
 {
+	
 	int length = top;
 	for (int i = 1; i < top; i++)
 	{
-		Record *x,*y,*z;
+		Record *x, *y, *z;
 		z = new Record();
 		x = ExtractMin(MinHeap, length--);
 		y = ExtractMin(MinHeap, length--);
@@ -89,31 +113,11 @@ Record* Huffman(Record* MinHeap, int top)
 		z->c ='$';
 		z->count = x->count + y->count;
 
-  		if(length>=0)
-			InsertHeap(MinHeap, *z, length++);
+  		if(length>0)
+			InsertHeap(MinHeap, *z , length++);
 	}
-	Record* root = &MinHeap[1];
+	Record* root = &MinHeap[0];
 	return root; //return root
-}
-int search(char ch,Record* record,int top)
-{
-	for (int i = 0; i <= top; i++)
-	{
-		if (record[i].c == ch)
-			return i;
-	}
-	return -1; //not found
-}
-void pushRecord(char ch, Record* record, int top)
-{
-	record[top].c = ch;
-	record[top].count++;
-}
-void printRecord(Record* record,int top)
-{
-	for (int i = 1; i <= top; i++)
-		cout << "char = " << record[i].c << "   count = " << record[i].count << endl;
-
 }
 
 void Inorder(Record* root)
@@ -153,7 +157,7 @@ int main()
 	Record record[100];
 
 	fstream file;
-	file.open("Text.txt",ios::in);
+	file.open("input.txt",ios::in);
 	if (!file)
 		cout << "Open file fail!";
 	//read every character
@@ -176,7 +180,7 @@ int main()
 	Record* root=Huffman(record, top);
  	int code[30];
 	printCode(root, code, 0);
-	Inorder(root);
+
 	//cout << root->count << endl;
 	/*
 	for (int i = 0; i < counter; i++)
