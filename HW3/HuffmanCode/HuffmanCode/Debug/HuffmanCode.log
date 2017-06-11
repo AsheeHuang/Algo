@@ -1,2 +1,5 @@
 ﻿  HuffmanCode.cpp
-LINK : fatal error LNK1168: 無法開啟 D:\Github\Algo\HW3\HuffmanCode\Debug\HuffmanCode.exe 進行寫入
+d:\github\algo\hw3\huffmancode\huffmancode\huffmancode.cpp(74): warning C4715: 'ExtractMin': 不是所有控制路徑都傳回值
+d:\github\algo\hw3\huffmancode\huffmancode\huffmancode.cpp(116): warning C4715: 'Huffman': 不是所有控制路徑都傳回值
+  HuffmanCode.vcxproj -> D:\Github\Algo\HW3\HuffmanCode\Debug\HuffmanCode.exe
+  HuffmanCode.vcxproj -> D:\Github\Algo\HW3\HuffmanCode\Debug\HuffmanCode.pdb (Partial PDB)

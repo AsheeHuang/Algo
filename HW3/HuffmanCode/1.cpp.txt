@@ -1,0 +1,234 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct node{
+	int value;
+	int data;
+	struct node *next, *left, *right;
+};
+
+typedef struct node Node;
+
+struct tree{
+	int num;
+	Node *start;	
+}*Tree;
+
+int *Map;
+
+void initial_node(int *freq){
+	Tree = (struct tree*) malloc(sizeof(struct tree));
+	Tree->num = 0;
+	Node *Ptr;
+
+	int datamin, fmin = 1, dmin;
+	do{
+		/////select min/////
+		dmin = 1000;
+		for (int i = 0; i < 256; i++){
+			int tmp = freq[i] - fmin;
+			if ((tmp <= dmin) && (tmp >= 0)){
+				dmin = tmp;
+				datamin = i;
+				if (tmp == 0)	
+					break;
+			}
+		}
+			
+		fmin = freq[datamin];
+		freq[datamin] = 0;
+	 
+		if (dmin == 1000)
+			break;	
+
+		////node to node////
+		Node *node;
+		node = (Node*) malloc(sizeof(Node));
+		node->left = NULL;
+		node->right= NULL;		
+		node->value= fmin;
+		node->data = datamin;
+		if (Tree->num == 0)
+			Tree->start = node;
+		else
+			Ptr->next = node;
+		Tree->num++;
+		Ptr = node;
+
+	}while(1);
+	
+	Ptr->next = NULL;
+}
+
+void huffman_tree(){
+	while(Tree->num != 1){
+		Node *NewNode, *Ptr;
+		NewNode = (Node*) malloc(sizeof (Node));
+		
+		////create new node
+		Ptr = Tree->start;
+		NewNode->left = Ptr;
+		NewNode->right= Ptr->next;
+		NewNode->data = -1;
+		NewNode->value= Ptr->value + Ptr->next->value;
+		NewNode->next = NULL;
+
+		////delete old next////
+		Tree->start = Ptr->next->next;
+		Ptr->next->next = NULL;
+		Tree->num--;		
+
+		////sort///
+		if (Tree->num == 1){
+			Tree->start = NewNode;
+			break;
+		}
+
+		Ptr = Tree->start;
+		if (Ptr->value >= NewNode->value){
+			NewNode->next = Ptr;
+			Tree->start   = NewNode;
+		}
+		else{
+			while(1){
+				if (Ptr->next == NULL){
+					Ptr->next = NewNode;
+					NewNode->next = NULL;
+					break;
+				}
+
+				if ((Ptr->value < NewNode->value) && (Ptr->next->value >= NewNode->value)){
+					NewNode->next = Ptr->next; 
+					Ptr->next     = NewNode;
+					break;
+				}
+				Ptr = Ptr->next;		
+			}
+		}	
+	}
+}
+
+void Tree_Left(Node* node, int code);
+
+void Tree_Right(Node* node, int code){
+	if (node == NULL)
+		return;
+
+	code = code*2 + 1;
+	Tree_Right(node->right, code);
+	if (node->data != -1)
+		Map[node->data] = code;
+	Tree_Left(node->left, code);	
+}
+
+void Tree_Left(Node* node, int code){
+	if (node == NULL)
+		return;	
+
+	code = code* 2;
+	Tree_Right(node->right, code);
+	if (node->data != -1)
+		Map[node->data] = code;
+	Tree_Left(node->left, code);	
+}
+
+
+void codelist(){
+	Map = (int*) malloc(256* sizeof(int));
+	for (int i = 0; i < 256; i++)
+		Map[i] = 0;
+
+	int code = 1;
+	Tree_Right(Tree->start->right, code);
+	Tree_Left(Tree->start->left, code);
+}
+
+void deleteNode(Node *pt){
+	if (pt == NULL)
+		return;
+
+	deleteNode(pt->right);
+	deleteNode(pt->left);
+	free(pt);
+	
+	return;
+}
+
+
+int main(){
+	int *freq;
+	freq = (int*) malloc(256* sizeof(int));
+	for (int i = 0; i < 256; i++)
+		freq[i] = 0;
+
+	///////count///////
+	FILE *fp = fopen("input.txt", "r");
+	int loc;
+
+	while((loc = (int)fgetc(fp)) != EOF)
+		freq[loc] ++;	
+
+	fclose(fp);
+
+	//////initial node/////
+	initial_node(freq); //sort and node 
+
+	/////huffman tree////
+   	huffman_tree();
+
+	////letter map code////
+	codelist();
+
+	FILE *input = fopen("input.txt", "r");
+	FILE *output= fopen("text.txt", "w");
+
+	int max, tmp;
+	while((loc = (int)fgetc(input)) != EOF){
+		max = 1;
+		while(1){
+			if (max > Map[loc])
+				break;
+			max = max* 2; 
+		}
+		tmp = Map[loc] - max/2;
+		for (int i = max/4; i > 0; i = i/2){
+			if (tmp >= i){
+				fputs("1", output);
+				tmp = tmp - i;
+			}
+			else
+				fputs("0", output);
+		}	
+	}
+	
+	
+	fclose(input);
+	fclose(output);
+
+	input = fopen("text.txt", "r");
+	output= fopen("output.txt", "w");
+	char token;
+	Node *pt;
+	pt = Tree->start;
+	while((token = fgetc(input)) != EOF){
+		if (token == '1')
+			pt = pt->right;
+		else
+			pt = pt->left;
+
+		if (pt->right == NULL && pt->left == NULL){
+			fprintf(output, "%c", (char)(pt->data));	
+			pt = Tree->start;
+		}
+		
+	}
+	fclose(input);
+	fclose(output);
+
+	free(freq);
+	free(Map);
+	deleteNode(Tree->start);
+	free(Tree);	
+	return 0;
+}

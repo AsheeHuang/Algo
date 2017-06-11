@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#pragma warning(disable:4996)
+
 using namespace std;
 struct Record
 {
@@ -12,12 +14,6 @@ struct Record
 	int count=0;
 	Record* left=NULL, *right=NULL;
 };
-struct Huffmancode
-{
-	string s;
-	char c;
-};
-Huffmancode huffmancode[100];
 
 int search(char ch, Record* record, int top)
 {
@@ -62,32 +58,29 @@ void Heapify(Record* MinHeap, int i, int length)
 }
 Record* ExtractMin(Record* MinHeap, int length)
 {
-    Record temp;
-	Record* pointer=new Record();
-	if (length > 0)
+	Record temp;
+	if (length == 1)
+		return &MinHeap[1];
+	else if (length > 1)
 	{
 		temp = MinHeap[1];
 		MinHeap[1] = MinHeap[length];
 		MinHeap[length] = temp;
 		
 		Heapify(MinHeap, 1, length - 1);
+		return &MinHeap[length];
 	}
-	else
-		cout << "length < 1 \n";
-	return &MinHeap[length];
-}
-void InsertHeap(Record* MinHeap, Record record, int length)
-{
 
-	if(length>0)
-		MinHeap[++length] = record;
-		//bottom up heapify
+}
+void InsertHeap(Record* MinHeap, Record* record, int length)
+{
+	MinHeap[++length] = *record;
 	int i = length;
-	int parent;
-	int key = MinHeap[length].count;
-	while (i > 0)
+
+	int key = MinHeap[i].count;
+	while (i>0)
 	{
-		parent = i / 2;
+		int parent = i / 2;
 		if (key < MinHeap[parent].count)
 		{
 			MinHeap[i] = MinHeap[parent];
@@ -96,7 +89,7 @@ void InsertHeap(Record* MinHeap, Record record, int length)
 		else
 			break;
 	}
-	MinHeap[i] = record;
+	MinHeap[i] = *record;
 }
 Record* Huffman(Record* MinHeap, int top)
 {
@@ -105,6 +98,7 @@ Record* Huffman(Record* MinHeap, int top)
 	for (int i = 1; i < top; i++)
 	{
 		Record *x, *y, *z;
+	
 		z = new Record();
 		x = ExtractMin(MinHeap, length--);
 		y = ExtractMin(MinHeap, length--);
@@ -114,12 +108,12 @@ Record* Huffman(Record* MinHeap, int top)
 		z->count = x->count + y->count;
 
   		if(length>0)
-			InsertHeap(MinHeap, *z , length++);
+			InsertHeap(MinHeap, z , length++);
+		else if (length == 0)
+			return z;
 	}
-	Record* root = &MinHeap[0];
-	return root; //return root
-}
 
+}
 void Inorder(Record* root)
 {
 	if (root!=NULL)
@@ -150,6 +144,7 @@ void printCode(Record* root, int code[], int top)
 		cout << endl;
 	}
 }
+
 int main()
 {
 	char ch;
@@ -186,6 +181,17 @@ int main()
 	for (int i = 0; i < counter; i++)
 		cout << huffmancode[i].c  <<"  : "<<huffmancode[i].s<< endl;
 	*/
+	
+
+	// output
+	fstream input;
+	input.open("input.txt", ios::in);
+	FILE* fd=fopen("output.txt","w");
+	if (!fd)
+		cout << "file failed" << endl;
+	while (input.get(ch))
+		fprintf(fd, "%c", ch);
+
 
 	system("PAUSE");
     return 0;
