@@ -27,7 +27,6 @@ struct MinHeap
  
  struct code
  {
- 	
  	char c;
  	std::string s;
  };
